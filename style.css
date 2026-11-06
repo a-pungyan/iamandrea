@@ -52,7 +52,6 @@ nav { display: flex; gap: clamp(22px, 3.5vw, 48px); }
 nav a { font-size: 14px; text-decoration: none; padding: 10px 12px; margin-inline: -12px; border-radius: 4px; }
 nav a:hover { text-decoration: underline; }
 .intro {
-  --portrait-width: clamp(80px, 14vw, 180px);
   position: relative;
   padding-block: clamp(12px, 2vw, 28px) clamp(56px, 7vw, 96px);
 }
@@ -61,16 +60,14 @@ nav a:hover { text-decoration: underline; }
   display: grid;
   width: max-content;
   margin-inline: auto;
-  grid-template-columns: calc(var(--portrait-width) * 0.7) max-content;
+  grid-template-columns: max-content;
   justify-content: center;
   align-items: start;
   transform: translate3d(var(--drift-x, 0px), var(--drift-y, 0px), 0);
 
 }
-.intro-photo { grid-area: 1 / 1 / 2 / 3; width: var(--portrait-width); margin: clamp(48px, 6vw, 76px) 0 0; position: relative; z-index: 0; }
-.intro-photo img { display: block; width: 100%; height: auto; }
 .word-map {
-  grid-area: 1 / 2 / 2 / 3;
+  grid-area: 1 / 1 / 2 / 2;
   position: relative;
   z-index: 1;
   display: flex;
@@ -96,7 +93,7 @@ nav a:hover { text-decoration: underline; }
   justify-content: center;
   position: relative;
   padding: 2px 0;
-  font-size: clamp(10px, calc(var(--word-size) * 0.68vw), calc(var(--word-size) * 7.48px));
+  font-size: clamp(11px, calc(var(--word-size) * 0.9vw), calc(var(--word-size) * 9.9px));
   line-height: 1.05;
   white-space: nowrap;
 }
