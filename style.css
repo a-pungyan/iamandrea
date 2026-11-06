@@ -152,6 +152,7 @@ p { color: var(--muted); font-size: 16px; line-height: 1.65; margin: 0; max-widt
 .project-summary:has(+ .demo-link) { margin-bottom: 12px; }
 .demo-link { margin-bottom: 64px; }
 .project-detail section { margin-bottom: 56px; }
+.project-detail section p + p { margin-top: 18px; }
 .project-detail section h2 { font-size: 24px; font-weight: 400; margin-bottom: 16px; }
 .project-detail figure { margin: 24px 0 0; }
 .project-detail figure img { display: block; width: 100%; height: auto; }
