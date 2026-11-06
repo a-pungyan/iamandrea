@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#f2f2f0"/>
+  <g fill="#62625f" font-family="Helvetica, Arial, sans-serif" text-anchor="middle">
+    <text x="600" y="430" font-size="34">Screenshot placeholder</text>
+    <text x="600" y="485" font-size="24">Elevator Issue Tracker</text>
+  </g>
+</svg>
