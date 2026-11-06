@@ -186,6 +186,23 @@ h2 { font-size: 16px; font-weight: 500; margin: 0 0 16px; }
 footer { padding-block: 26px; color: var(--muted); font-size: 12px; }
 .skip-link { position: absolute; left: 24px; top: -80px; padding: 12px; background: var(--background); }
 .skip-link:focus { top: 12px; }
+.back-to-top {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 30;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--background);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.back-to-top:hover { border-color: var(--text); }
+.back-to-top:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
 .inverting-cursor {
   position: fixed;
   top: 0;

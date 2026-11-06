@@ -1,6 +1,26 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
 const header = document.querySelector('.site-header');
+const backToTop = document.createElement('button');
+backToTop.className = 'back-to-top';
+backToTop.type = 'button';
+backToTop.textContent = 'Back to top';
+backToTop.hidden = true;
+document.body.append(backToTop);
+
+function updateBackToTop() {
+  backToTop.hidden = window.scrollY < 300;
+}
+backToTop.addEventListener('click', () => {
+  window.scrollTo({
+    top: 0,
+    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+  });
+  const homeLink = header.querySelector('.name');
+  homeLink.focus({ preventScroll: true });
+});
+window.addEventListener('scroll', updateBackToTop, { passive: true });
+updateBackToTop();
 const menuToggle = document.querySelector('.menu-toggle');
 const navigation = document.getElementById('main-navigation');
 let menuPinned = false;
