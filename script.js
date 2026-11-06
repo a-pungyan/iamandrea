@@ -144,6 +144,68 @@ const wordMap = document.querySelector('.word-map');
 const lensMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const lensLetters = [];
 
+const intro = document.querySelector('.intro');
+const composition = document.querySelector('.intro-composition');
+if (intro && composition) {
+  let driftFrame = null;
+  let previousTime;
+  let currentX = 0;
+  let currentY = 0;
+  let targetX = 0;
+  let targetY = 0;
+
+  function animateDrift(time) {
+    const dt = previousTime === undefined ? 16 : Math.min(time - previousTime, 50);
+    previousTime = time;
+    const easing = 1 - Math.exp(-dt / 300);
+    currentX += (targetX - currentX) * easing;
+    currentY += (targetY - currentY) * easing;
+    const settled = Math.hypot(targetX - currentX, targetY - currentY) < 0.015;
+    if (settled) { currentX = targetX; currentY = targetY; }
+    composition.style.setProperty('--drift-x', `${currentX}px`);
+    composition.style.setProperty('--drift-y', `${currentY}px`);
+    driftFrame = settled ? null : requestAnimationFrame(animateDrift);
+    if (settled) previousTime = undefined;
+  }
+  function startDrift() {
+    if (driftFrame === null) driftFrame = requestAnimationFrame(animateDrift);
+  }
+  function resetDrift() {
+    targetX = 0;
+    targetY = 0;
+    if (lensMotion.matches || !cursorMedia.matches) {
+      cancelAnimationFrame(driftFrame);
+      driftFrame = null;
+      previousTime = undefined;
+      currentX = currentY = 0;
+      composition.style.removeProperty('--drift-x');
+      composition.style.removeProperty('--drift-y');
+    } else startDrift();
+  }
+  intro.addEventListener('pointermove', (event) => {
+    if (event.pointerType !== 'mouse' || lensMotion.matches || !cursorMedia.matches) return;
+    const bounds = intro.getBoundingClientRect();
+    const dx = event.clientX - (bounds.left + composition.offsetLeft + composition.offsetWidth / 2);
+    const dy = event.clientY - (bounds.top + composition.offsetTop + composition.offsetHeight / 2);
+    // A broad, continuous falloff avoids sudden direction changes near the center.
+    const falloff = Math.exp(-(dx * dx + dy * dy) / (2 * 220 * 220));
+    const nextX = -dx / 220 * 6 * falloff;
+    const nextY = -dy / 220 * 6 * falloff;
+    // Ignore tiny target changes caused by pointer jitter.
+    if (Math.hypot(nextX - targetX, nextY - targetY) < 0.15) return;
+    targetX = nextX;
+    targetY = nextY;
+    startDrift();
+  });
+  intro.addEventListener('pointerleave', resetDrift);
+  intro.addEventListener('pointercancel', resetDrift);
+  intro.addEventListener('focusin', resetDrift);
+  window.addEventListener('blur', resetDrift);
+  window.addEventListener('scroll', resetDrift, { passive: true });
+  lensMotion.addEventListener('change', resetDrift);
+  cursorMedia.addEventListener('change', resetDrift);
+}
+
 if (wordMap) {
   wordMap.querySelectorAll('.word-label').forEach((label) => {
     const text = label.textContent;
