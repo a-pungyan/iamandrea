@@ -43,86 +43,95 @@ function setMenuOpen(open) {
   menuToggle.setAttribute('aria-expanded', String(open));
   menuToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
   navigation.hidden = !open;
+  if (open && !atTop) header.querySelectorAll('.navigation-letter').forEach(letter => { letter.style.visibility = 'hidden'; });
 }
 
 const headerMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-let headerFlights = [];
-let headerAnimations = [];
-function clearHeaderMotion() {
-  headerAnimations.forEach(animation => animation.cancel());
-  headerFlights.forEach(letter => letter.remove());
-  headerAnimations = [];
-  headerFlights = [];
-}
-function getNavigationLetters() {
-  const letters = [];
+let headerLetters = [];
+let headerProgress = 0;
+let headerTarget = 0;
+let headerFrame = null;
+let headerLastTime;
+let headerTargetPoint;
+
+function measureHeaderLetters() {
+  headerLetters.forEach(({ ghost }) => ghost.remove());
+  headerLetters = [];
+  header.style.removeProperty('min-height');
+  header.classList.remove('menu-enabled');
+  menuToggle.hidden = true;
+  navigation.hidden = false;
+  const bounds = header.getBoundingClientRect();
+  const nameBounds = header.querySelector('.name').getBoundingClientRect();
+  header.style.minHeight = `${bounds.height}px`;
+  headerTargetPoint = { x: bounds.width - 22, y: nameBounds.top - bounds.top + nameBounds.height / 2 };
   navigation.querySelectorAll('a').forEach(link => {
     const node = link.firstChild;
     if (!node || node.nodeType !== Node.TEXT_NODE) return;
-    const style = getComputedStyle(link);
+    const font = getComputedStyle(link).font;
     for (let index = 0; index < node.length; index++) {
       if (!node.textContent[index].trim()) continue;
       const range = document.createRange();
       range.setStart(node, index);
       range.setEnd(node, index + 1);
       const rect = range.getBoundingClientRect();
-      letters.push({ text: node.textContent[index], rect, font: style.font, color: style.color });
+      const ghost = document.createElement('span');
+      ghost.className = 'navigation-letter';
+      ghost.setAttribute('aria-hidden', 'true');
+      ghost.textContent = node.textContent[index];
+      const x = rect.left - bounds.left;
+      const y = rect.top - bounds.top;
+      Object.assign(ghost.style, { left: `${x}px`, top: `${y}px`, font, visibility: 'hidden' });
+      header.append(ghost);
+      headerLetters.push({ ghost, dx: headerTargetPoint.x - x - rect.width / 2, dy: headerTargetPoint.y - y - rect.height / 2 });
     }
   });
-  return letters;
+  renderHeaderProgress();
 }
-function animateNavigationLetters(letters, buttonRect, gathering) {
-  letters.forEach((letter, index) => {
-    const ghost = document.createElement('span');
-    ghost.className = 'navigation-letter';
-    ghost.setAttribute('aria-hidden', 'true');
-    ghost.textContent = letter.text;
-    Object.assign(ghost.style, { left: `${letter.rect.left}px`, top: `${letter.rect.top}px`, font: letter.font, color: letter.color });
-    document.body.append(ghost);
-    headerFlights.push(ghost);
-    const dx = buttonRect.left + buttonRect.width / 2 - letter.rect.left - letter.rect.width / 2;
-    const dy = buttonRect.top + buttonRect.height / 2 - letter.rect.top - letter.rect.height / 2;
-    const spread = { transform: 'translate(0, 0) scale(1)', opacity: 1 };
-    const collected = { transform: `translate(${dx}px, ${dy}px) scale(0.15)`, opacity: 0 };
-    const animation = ghost.animate(gathering ? [spread, collected] : [collected, spread], {
-      duration: 430,
-      delay: index * 6,
-      easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-      fill: 'both',
-    });
-    headerAnimations.push(animation);
-    animation.finished.then(() => ghost.remove()).catch(() => ghost.remove());
+function renderHeaderProgress() {
+  const expanded = headerProgress < 0.002;
+  const changed = atTop !== expanded;
+  atTop = expanded;
+  header.classList.toggle('menu-enabled', !expanded);
+  menuToggle.hidden = expanded;
+  if (changed || expanded) setMenuOpen(expanded || navigation.contains(document.activeElement));
+  const menuOpen = !expanded && !navigation.hidden;
+  menuToggle.style.opacity = String(Math.max(0, Math.min(1, (headerProgress - 0.55) / 0.45)));
+  menuToggle.style.pointerEvents = headerProgress < 0.55 ? 'none' : '';
+  headerLetters.forEach(({ ghost, dx, dy }, index) => {
+    const delay = (index / Math.max(1, headerLetters.length - 1)) * 0.12;
+    const p = Math.max(0, Math.min(1, (headerProgress - delay) / (1 - delay)));
+    const eased = p * p * (3 - 2 * p);
+    ghost.style.visibility = expanded || menuOpen || headerMotion.matches ? 'hidden' : 'visible';
+    ghost.style.transform = `translate(${dx * eased}px, ${dy * eased}px) scale(${1 - eased * 0.85})`;
+    ghost.style.opacity = String(1 - Math.pow(eased, 3));
   });
 }
-function updateHeader(initial = false) {
-  const nextAtTop = initial ? window.scrollY <= 40 : (atTop ? window.scrollY < 72 : window.scrollY <= 16);
-  if (!initial && nextAtTop === atTop) return;
-  clearHeaderMotion();
-  const gathering = !nextAtTop;
-  const animate = !initial && !headerMotion.matches;
-  const lettersBefore = animate && gathering ? getNavigationLetters() : [];
-  const oldButtonRect = !gathering ? menuToggle.getBoundingClientRect() : null;
-  const focusedLink = navigation.contains(document.activeElement);
-  const focusedToggle = document.activeElement === menuToggle;
-  atTop = nextAtTop;
-  header.classList.toggle('menu-enabled', !atTop);
-  menuToggle.hidden = atTop;
-  setMenuOpen(atTop || focusedLink);
-  if (focusedToggle && atTop) navigation.querySelector('a').focus({ preventScroll: true });
-  if (!animate) return;
-  const letters = gathering ? lettersBefore : getNavigationLetters();
-  const buttonRect = gathering ? menuToggle.getBoundingClientRect() : oldButtonRect;
-  animateNavigationLetters(letters, buttonRect, gathering);
-  const fadeTarget = gathering ? menuToggle : navigation;
-  headerAnimations.push(fadeTarget.animate([{ opacity: 0 }, { opacity: 1 }], {
-    duration: 180, delay: 430 + letters.length * 6, fill: 'backwards',
-  }));
+function animateHeaderProgress(time) {
+  const dt = headerLastTime === undefined ? 16 : Math.min(50, time - headerLastTime);
+  headerLastTime = time;
+  headerProgress += (headerTarget - headerProgress) * (1 - Math.exp(-dt / 85));
+  const settled = Math.abs(headerTarget - headerProgress) < 0.001;
+  if (settled) headerProgress = headerTarget;
+  renderHeaderProgress();
+  headerFrame = settled ? null : requestAnimationFrame(animateHeaderProgress);
+  if (settled) headerLastTime = undefined;
 }
+function updateHeader() {
+  headerTarget = Math.max(0, Math.min(1, (window.scrollY - 16) / 220));
+  if (headerMotion.matches) {
+    headerProgress = headerTarget >= 0.5 ? 1 : 0;
+    renderHeaderProgress();
+  } else if (headerFrame === null) headerFrame = requestAnimationFrame(animateHeaderProgress);
+}
+headerProgress = headerMotion.matches ? (window.scrollY > 126 ? 1 : 0) : Math.max(0, Math.min(1, (window.scrollY - 16) / 220));
+headerTarget = headerProgress;
+measureHeaderLetters();
 setMenuOpen(atTop);
-updateHeader(true);
-window.addEventListener('scroll', () => updateHeader(), { passive: true });
-headerMotion.addEventListener('change', clearHeaderMotion);
-window.addEventListener('resize', clearHeaderMotion);
+window.addEventListener('scroll', updateHeader, { passive: true });
+window.addEventListener('resize', measureHeaderLetters);
+document.fonts?.ready.then(measureHeaderLetters);
+headerMotion.addEventListener('change', updateHeader);
 
 menuToggle.addEventListener('click', () => {
   menuPinned = !menuPinned;
