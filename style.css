@@ -1,4 +1,12 @@
 @font-face {
+  font-family: "Belgiano";
+  src: url("assets/Belgiano Serif 2.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Griffiths";
   src: url("assets/Griffiths.otf") format("opentype");
   font-weight: 400;
@@ -103,7 +111,7 @@ nav a:hover { text-decoration: underline; }
 .word-row:nth-child(6) { transform: translateX(-12%); }
 .word-row:last-child { transform: translateX(18%); margin-top: 6px; }
 .word {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: "Belgiano", Georgia, serif;
   --rotation: 0deg;
   --word-size: 3;
   display: inline-flex;
@@ -133,7 +141,7 @@ nav a:hover { text-decoration: underline; }
 .word-yardi { --word-size: 3.1; --rotation: -0.5deg; }
 .word-design { --word-size: 3.3; font-weight: 500; }
 .word-3d { --word-size: 2.9; }
-.word-dreamer { --word-size: 4.4; font-family: Georgia, "Times New Roman", serif; letter-spacing: -0.025em; padding: 3px 0; }
+.word-dreamer { --word-size: 4.4; font-family: "Belgiano", Georgia, serif; letter-spacing: -0.025em; padding: 3px 0; }
 .word-quick { --word-size: 2.6; --rotation: -0.5deg; }
 .word-learner { --word-size: 3.2; }
 .word-modelling { --word-size: 3.5; }
