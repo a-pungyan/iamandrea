@@ -269,16 +269,16 @@ footer { padding-block: 26px; color: var(--muted); font-size: 12px; }
 }
 @media (max-width: 600px) {
   body { --header-gutter: 20px; }
-  .site-header { min-height: 100px; flex-wrap: wrap; align-content: center; gap: 2px; padding-block: 14px; }
-  .name { width: auto; flex: 1; padding-block: 8px; }
+  .site-header { min-height: 0; flex-wrap: wrap; align-content: start; gap: 0; padding-block: 8px; }
+  .name { width: auto; flex: 1; padding-block: 4px; }
   nav { gap: 28px; }
   .site-header:not(.menu-enabled) nav { flex-basis: 100%; gap: 22px; }
   .intro {
     min-height: 100lvh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    padding-block: 0 160px;
+    padding-block: 24px 120px;
     overflow-x: clip;
   }
   .word-map { gap: 0; padding: 10px 0; }
