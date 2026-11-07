@@ -1,7 +1,23 @@
 @font-face {
+  font-family: "Griffiths";
+  src: url("assets/Griffiths.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Keep Calm";
   src: url("KeepCalm-Medium.ttf") format("truetype");
   font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TangoSans";
+  src: url("assets/TangoSans_Bold.ttf") format("truetype");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -31,7 +47,7 @@ a:focus-visible { outline: 2px solid var(--text); outline-offset: 7px; border-ra
 ::selection { color: var(--text); background: #e8e8e8; }
 .site-header, main, footer { max-width: 1280px; margin-inline: auto; }
 .site-header { max-width: none; margin-inline: calc(var(--header-gutter) - var(--page-gutter)); min-height: 112px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
-.name { font-family: "Keep Calm", sans-serif; font-size: clamp(32px, 4.5vw, 60px); font-weight: 500; line-height: 1.12; letter-spacing: -0.025em; text-decoration: none; padding-block: 16px; min-width: 0; overflow-wrap: anywhere; }
+.name { font-family: "Keep Calm", sans-serif; font-size: clamp(32px, 4.5vw, 60px); font-weight: 700; line-height: 1.12; letter-spacing: -0.025em; text-decoration: none; padding-block: 16px; min-width: 0; overflow-wrap: anywhere; }
 .site-header { position: sticky; top: 0; z-index: 20; background: var(--background); }
 .site-header:not(.menu-enabled) nav { flex-wrap: wrap; }
 [hidden] { display: none !important; }
@@ -87,6 +103,7 @@ nav a:hover { text-decoration: underline; }
 .word-row:nth-child(6) { transform: translateX(-12%); }
 .word-row:last-child { transform: translateX(18%); margin-top: 6px; }
 .word {
+  font-family: Georgia, "Times New Roman", serif;
   --rotation: 0deg;
   --word-size: 3;
   display: inline-flex;
@@ -106,7 +123,6 @@ nav a:hover { text-decoration: underline; }
 }
 .word:focus-visible { outline: none; }
 .word:focus-visible .word-label { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1px; }
-.word-tmu, .word-ai, .word-3d { font-family: "Keep Calm", sans-serif; }
 .word-tmu { --word-size: 2.3; }
 .word-systems { --word-size: 2.7; }
 .word-technology { --word-size: 3.2; --rotation: -0.5deg; }
@@ -117,7 +133,7 @@ nav a:hover { text-decoration: underline; }
 .word-yardi { --word-size: 3.1; --rotation: -0.5deg; }
 .word-design { --word-size: 3.3; font-weight: 500; }
 .word-3d { --word-size: 2.9; }
-.word-dreamer { --word-size: 4.4; font-family: "Keep Calm", sans-serif; letter-spacing: -0.025em; padding: 3px 0; }
+.word-dreamer { --word-size: 4.4; font-family: Georgia, "Times New Roman", serif; letter-spacing: -0.025em; padding: 3px 0; }
 .word-quick { --word-size: 2.6; --rotation: -0.5deg; }
 .word-learner { --word-size: 3.2; }
 .word-modelling { --word-size: 3.5; }
