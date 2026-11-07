@@ -78,7 +78,7 @@ nav a:hover { text-decoration: underline; }
 .navigation-letter { position: fixed; z-index: 50; pointer-events: none; white-space: pre; transform-origin: center; }
 .intro {
   position: relative;
-  padding-block: clamp(12px, 2vw, 28px) clamp(56px, 7vw, 96px);
+  padding-block: calc(clamp(12px, 2vw, 28px) + 10px) clamp(88px, 10vw, 140px);
 }
 .intro-composition {
   position: relative;
@@ -104,12 +104,13 @@ nav a:hover { text-decoration: underline; }
   padding: 12px 0;
 }
 .word-row { display: flex; align-items: center; justify-content: center; gap: 4px; }
-.word-row:first-child { transform: translateX(-19%); margin-bottom: 5px; }
+.word-row:first-child { transform: translateX(-19%); }
 .word-row:nth-child(2) { transform: translateX(10%); }
-.word-row:nth-child(3) { transform: translateX(-8%); margin-bottom: 3px; }
-.word-row:nth-child(5) { transform: translateX(7%); margin-top: 4px; }
+.word-row:nth-child(3) { transform: translateX(-8%); }
+.word-row:nth-child(4) { transform: translateX(5%); }
+.word-row:nth-child(8) { transform: translateX(-5%); }
 .word-row:nth-child(6) { transform: translateX(-12%); }
-.word-row:last-child { transform: translateX(18%); margin-top: 6px; }
+.word-row:last-child { transform: translateX(18%); }
 .word {
   font-family: "Belgiano", Georgia, serif;
   --rotation: 0deg;
@@ -118,9 +119,9 @@ nav a:hover { text-decoration: underline; }
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 2px 0;
-  font-size: clamp(11px, calc(var(--word-size) * 1.12vw), calc(var(--word-size) * 12.32px));
-  line-height: 1.05;
+  padding: 0;
+  font-size: clamp(11px, calc(var(--word-size) * 2vw), calc(var(--word-size) * 22px));
+  line-height: 0.92;
   white-space: nowrap;
 }
 .word-label {
@@ -131,28 +132,31 @@ nav a:hover { text-decoration: underline; }
 }
 .word:focus-visible { outline: none; }
 .word:focus-visible .word-label { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1px; }
-.word-tmu { --word-size: 2.3; }
-.word-systems { --word-size: 2.7; }
-.word-technology { --word-size: 3.2; --rotation: -0.5deg; }
-.word-tattoo { --word-size: 2.5; --rotation: 0.5deg; }
-.word-ryerson { --word-size: 2.8; }
-.word-management { --word-size: 3.4; }
-.word-ai { --word-size: 2.4; }
-.word-yardi { --word-size: 3.1; --rotation: -0.5deg; }
-.word-design { --word-size: 3.3; font-weight: 500; }
-.word-3d { --word-size: 2.9; }
+.word-tmu { --word-size: 2.0; }
+.word-systems { --word-size: 3.1; }
+.word-technology { --word-size: 3.5; --rotation: -0.5deg; }
+.word-tattoo { --word-size: 2.4; --rotation: 0.5deg; }
+.word-ryerson { --word-size: 3.0; }
+.word-management { --word-size: 3.7; }
+.word-ai { --word-size: 4.0; }
+.word-automation { --word-size: 3.4; }
+.word-organization { --word-size: 3.3; }
+.word-detail { --word-size: 2.2; }
+.word-yardi { --word-size: 2.6; --rotation: -0.5deg; }
+.word-design { --word-size: 2.9; font-weight: 500; }
+.word-3d { --word-size: 2.2; }
 .word-dreamer { --word-size: 4.4; font-family: "Belgiano", Georgia, serif; letter-spacing: -0.025em; padding: 3px 0; }
-.word-quick { --word-size: 2.6; --rotation: -0.5deg; }
-.word-learner { --word-size: 3.2; }
-.word-modelling { --word-size: 3.5; }
-.word-business { --word-size: 2.9; font-weight: 500; }
-.word-operations { --word-size: 3.1; --rotation: 0.5deg; }
-.word-curious { --word-size: 2.7; }
-.word-powerbi { --word-size: 2.5; --rotation: -0.5deg; }
-.word-teams { --word-size: 2.4; }
-.word-adobe { --word-size: 2.6; --rotation: 0.5deg; }
-.word-canva { --word-size: 2.4; }
-.word-microsoft { --word-size: 2.8; }
+.word-quick { --word-size: 2.1; --rotation: -0.5deg; }
+.word-learner { --word-size: 3.3; }
+.word-modelling { --word-size: 2.6; }
+.word-business { --word-size: 3.5; font-weight: 500; }
+.word-operations { --word-size: 2.6; --rotation: 0.5deg; }
+.word-curious { --word-size: 2.3; }
+.word-powerbi { --word-size: 2.0; --rotation: -0.5deg; }
+.word-teams { --word-size: 2.3; }
+.word-adobe { --word-size: 2.2; --rotation: 0.5deg; }
+.word-canva { --word-size: 3.2; }
+.word-microsoft { --word-size: 3.1; }
 .lens-char { display: inline-block; white-space: pre; }
 .lens-ink { display: inline-block; transform: scale(var(--zoom, 1)); transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1); }
 .word:focus-visible { z-index: 2; }
@@ -162,6 +166,8 @@ p { color: var(--muted); font-size: 16px; line-height: 1.65; margin: 0; max-widt
 .intro p { font-size: clamp(16px, 1.5vw, 19px); }
 .work-section, .about-section, .contact-section, .project-detail section { scroll-margin-top: 150px; }
 .work-section { padding-block: 32px 100px; }
+.scroll-reveal.reveal-ready { opacity: 0; transform: translateY(48px) scale(0.985); transition: opacity 650ms ease-out, transform 850ms cubic-bezier(0.22, 1.08, 0.36, 1); }
+.scroll-reveal.reveal-ready.is-visible { opacity: 1; transform: translateY(0) scale(1); }
 .work-section > h2, .about-section > h2, .contact-section > h2 { font-size: clamp(26px, 3vw, 36px); font-weight: 400; letter-spacing: -0.025em; margin-bottom: 32px; }
 .project-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 3vw, 44px); }
 .project { min-width: 0; }
@@ -266,8 +272,9 @@ footer { padding-block: 26px; color: var(--muted); font-size: 12px; }
   .name { width: auto; flex: 1; padding-block: 8px; }
   nav { gap: 28px; }
   .site-header:not(.menu-enabled) nav { flex-basis: 100%; gap: 22px; }
-  .intro { padding-block: 12px 48px; }
+  .intro { padding-block: 22px 48px; }
   .word-map { gap: 0; padding: 10px 0; }
+  .word { font-size: clamp(11px, calc(var(--word-size) * 0.85vw), 24px); }
   .word-row { gap: 3px; }
   .project-grid { grid-template-columns: 1fr; gap: 56px; }
   .screenshot-gallery { grid-template-columns: 1fr; gap: 28px; }
@@ -279,6 +286,7 @@ footer { padding-block: 26px; color: var(--muted); font-size: 12px; }
   .about-section { padding-bottom: 56px; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .scroll-reveal.reveal-ready { opacity: 1; transform: none; transition: none; }
   .intro-composition { transform: none; transition: none; }
   html { scroll-behavior: auto; }
   .menu-toggle path { transition: none; }

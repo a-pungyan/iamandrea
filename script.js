@@ -315,23 +315,39 @@ if (wordMap) {
     lensLetters.forEach(({ ink }) => ink.style.removeProperty('--zoom'));
   }
 
-  wordMap.addEventListener('pointermove', (event) => {
-    if (event.pointerType !== 'mouse' || lensMotion.matches) return;
+  function updateLens(clientX, clientY) {
+    if (lensMotion.matches) return;
     cancelAnimationFrame(lensFrame);
     lensFrame = requestAnimationFrame(() => {
       const radius = 90;
       // Measure stationary anchors; only their inner lettering scales.
       const scales = lensLetters.map(({ anchor }) => {
         const rect = anchor.getBoundingClientRect();
-        const distance = Math.hypot(event.clientX - rect.left - rect.width / 2,
-          event.clientY - rect.top - rect.height / 2);
+        const distance = Math.hypot(clientX - rect.left - rect.width / 2,
+          clientY - rect.top - rect.height / 2);
         const proximity = Math.max(0, 1 - distance / radius);
         const falloff = proximity * proximity * (3 - 2 * proximity);
         return 1 + 0.65 * falloff;
       });
       lensLetters.forEach(({ ink }, index) => ink.style.setProperty('--zoom', scales[index]));
     });
+  }
+  wordMap.addEventListener('pointermove', (event) => {
+    if (event.pointerType !== 'touch') updateLens(event.clientX, event.clientY);
   });
+  // Passive touch listeners keep the lens active during swipes without blocking scrolling.
+  function updateTouchLens(event) {
+    if (event.touches.length !== 1) {
+      resetLens();
+      return;
+    }
+    const touch = event.touches[0];
+    updateLens(touch.clientX, touch.clientY);
+  }
+  wordMap.addEventListener('touchstart', updateTouchLens, { passive: true });
+  wordMap.addEventListener('touchmove', updateTouchLens, { passive: true });
+  wordMap.addEventListener('touchend', resetLens, { passive: true });
+  wordMap.addEventListener('touchcancel', resetLens, { passive: true });
   wordMap.addEventListener('pointerleave', resetLens);
   wordMap.addEventListener('pointercancel', resetLens);
   window.addEventListener('blur', resetLens);
@@ -366,3 +382,28 @@ contactForm?.addEventListener('submit', async (event) => {
     contactForm.removeAttribute('aria-busy');
   }
 });
+
+const revealSections = document.querySelectorAll('.work-section, .about-section, .contact-section');
+const revealMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+if ('IntersectionObserver' in window && !revealMotion.matches) {
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      revealObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -80px 0px' });
+  revealSections.forEach(section => {
+    section.classList.add('scroll-reveal', 'reveal-ready');
+    revealObserver.observe(section);
+    section.addEventListener('focusin', () => {
+      section.classList.add('is-visible');
+      revealObserver.unobserve(section);
+    });
+  });
+  revealMotion.addEventListener('change', () => {
+    if (!revealMotion.matches) return;
+    revealSections.forEach(section => section.classList.add('is-visible'));
+    revealObserver.disconnect();
+  });
+}
