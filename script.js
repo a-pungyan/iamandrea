@@ -1,3 +1,9 @@
+// Keep the homepage URL clean, including visits through older index.html links.
+if (/\/index\.html?$/.test(window.location.pathname)) {
+  const cleanPath = window.location.pathname.replace(/index\.html?$/, '');
+  window.history.replaceState(window.history.state, '', cleanPath + window.location.search + window.location.hash);
+}
+
 document.getElementById('year').textContent = new Date().getFullYear();
 
 const header = document.querySelector('.site-header');
