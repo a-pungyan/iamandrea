@@ -105,13 +105,19 @@
       <section class="contact-section" id="contact" aria-labelledby="contact-title">
         <h2 id="contact-title">Contact</h2>
         <p>Email me at <a href="mailto:andrearenaeten@icloud.com">andrearenaeten@icloud.com</a>, or write a message below.</p>
-        <div class="contact-embed" data-formspace="https://rosy-spring-945.forms.space/contact-us-l71f4v"></div>
-        <p class="contact-fallback">If the form doesn’t load, <a href="https://rosy-spring-945.forms.space/contact-us-l71f4v" target="_blank" rel="noopener noreferrer">open the contact form directly</a>.</p>
+        <form class="contact-form" action="https://formspree.io/f/xwlljlbe" method="post">
+          <div class="contact-fields">
+            <label for="contact-name">Name<input id="contact-name" name="name" type="text" autocomplete="name" required maxlength="120" /></label>
+            <label for="contact-email">Email<input id="contact-email" name="email" type="email" autocomplete="email" required maxlength="254" /></label>
+          </div>
+          <label for="contact-message">Message<textarea id="contact-message" name="message" rows="4" required maxlength="5000"></textarea></label>
+          <p class="contact-help" id="contact-help" role="status" aria-live="polite" aria-atomic="true"></p>
+          <button class="contact-submit" type="submit">Send message</button>
+        </form>
       </section>
     </main>
 
     <footer>© <span id="year">2026</span> Andrea Pungyan</footer>
-    <script src="https://formspace.com/embed.js" defer crossorigin></script>
     <script src="script.js"></script>
   </body>
 </html>

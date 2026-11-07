@@ -149,11 +149,20 @@ p { color: var(--muted); font-size: 16px; line-height: 1.65; margin: 0; max-widt
 .project-link:hover { text-decoration-color: currentColor; }
 .about-section { padding-block: 16px 80px; max-width: 700px; }
 .about-section > h2 { margin-bottom: 20px; }
-.contact-section { padding-block: 16px 64px; max-width: 700px; }
+.contact-section { padding-block: 16px 64px; max-width: 540px; }
 .contact-section > h2 { margin: 0 0 20px; }
-.contact-embed { margin-top: 32px; width: 100%; }
-.contact-embed iframe { width: 100%; max-width: 100%; border: 0; }
-.contact-fallback { font-size: 13px; margin-top: 16px; }
+.contact-form { margin-top: 24px; }
+.contact-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.contact-form label { display: grid; gap: 7px; font-size: 14px; margin-bottom: 16px; }
+.contact-form input, .contact-form textarea { width: 100%; min-width: 0; padding: 8px 10px; border: 1px solid #b0b0b0; border-radius: 0; background: #fff; color: #000; font: inherit; font-size: 16px; caret-color: #000; }
+.contact-form textarea { resize: vertical; min-height: 100px; }
+.contact-form input:focus-visible, .contact-form textarea:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
+.contact-help { font-size: 13px; margin-bottom: 18px; }
+.contact-submit { min-height: 44px; padding: 12px 22px; border: 1px solid #000; border-radius: 0; background: #fff; color: #000; font: inherit; font-size: 14px; cursor: pointer; }
+.contact-submit:hover { text-decoration: underline; text-underline-offset: 4px; }
+.contact-submit:focus-visible { outline: 2px solid #000; outline-offset: 4px; }
+.contact-submit:disabled { opacity: 0.55; cursor: wait; }
+@media (max-width: 600px) { .contact-fields { grid-template-columns: 1fr; gap: 0; } }
 .project-detail { max-width: 1120px; padding-block: 40px 80px; }
 .project-detail p { max-width: none; }
 .back-link { font-size: 14px; margin-bottom: 40px; }

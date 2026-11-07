@@ -272,3 +272,32 @@ if (wordMap) {
   window.addEventListener('blur', resetLens);
   lensMotion.addEventListener('change', resetLens);
 }
+
+const contactForm = document.querySelector('.contact-form');
+contactForm?.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const button = contactForm.querySelector('[type="submit"]');
+  const status = document.getElementById('contact-help');
+  if (button.disabled) return;
+  if (!contactForm.reportValidity()) return;
+  button.disabled = true;
+  button.textContent = 'Sending…';
+  status.textContent = 'Sending your message…';
+  contactForm.setAttribute('aria-busy', 'true');
+  try {
+    const response = await fetch(contactForm.action, {
+      method: 'POST',
+      body: new FormData(contactForm),
+      headers: { Accept: 'application/json' },
+    });
+    if (!response.ok) throw new Error('Submission failed');
+    contactForm.reset();
+    status.textContent = 'Thanks! Your message has been sent.';
+  } catch {
+    status.textContent = 'Your message could not be sent. Please try again or email andrearenaeten@icloud.com. Your message is still here.';
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Send message';
+    contactForm.removeAttribute('aria-busy');
+  }
+});
