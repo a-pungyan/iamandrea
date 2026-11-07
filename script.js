@@ -94,7 +94,12 @@ function renderHeaderProgress() {
   atTop = expanded;
   header.classList.toggle('menu-enabled', !expanded);
   menuToggle.hidden = expanded;
-  if (changed || expanded) setMenuOpen(expanded || navigation.contains(document.activeElement));
+  if (changed || expanded) {
+    if (!expanded && navigation.contains(document.activeElement)) {
+      menuToggle.focus({ preventScroll: true });
+    }
+    setMenuOpen(expanded);
+  }
   const menuOpen = !expanded && !navigation.hidden;
   menuToggle.style.opacity = String(Math.max(0, Math.min(1, (headerProgress - 0.55) / 0.45)));
   menuToggle.style.pointerEvents = headerProgress < 0.55 ? 'none' : '';
@@ -141,7 +146,7 @@ menuToggle.addEventListener('click', () => {
 // The short delay keeps the menu open while crossing to the dropdown.
 for (const element of [menuToggle, navigation]) {
   element.addEventListener('pointerenter', (event) => {
-    if (event.pointerType === 'mouse') setMenuOpen(true);
+    if (event.pointerType === 'mouse' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) setMenuOpen(true);
   });
   element.addEventListener('pointerleave', (event) => {
     if (event.pointerType !== 'mouse' || menuPinned) return;
