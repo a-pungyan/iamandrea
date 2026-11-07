@@ -279,7 +279,7 @@ footer { padding-block: 26px; color: var(--muted); font-size: 12px; }
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding-block: 24px 120px;
+    padding-block: calc(24px + 10svh) max(24px, calc(120px - 10svh));
     overflow-x: clip;
   }
   .word-map { gap: 0; padding: 10px 0; }
