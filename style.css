@@ -165,7 +165,7 @@ p { color: var(--muted); font-size: 16px; line-height: 1.65; margin: 0; max-widt
 .excel-highlight-yellow { background: #ffeb9c; color: #9c6500; }
 .excel-highlight-orange { background: #fce4d6; color: #843c0c; }
 .excel-highlight-green { background: #c6efce; color: #006100; }
-.project-detail section h2 { font-size: 24px; font-weight: 400; margin-bottom: 16px; }
+.project-detail section h2 { font-size: 24px; font-weight: 700; margin-bottom: 16px; }
 .project-detail figure { margin: 24px 0 0; min-width: 0; }
 .project-detail figure img { display: block; width: auto; max-width: 100%; height: auto; max-height: 440px; object-fit: contain; margin-inline: auto; }
 .project-detail figure { max-width: 100%; }
