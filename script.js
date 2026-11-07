@@ -397,9 +397,9 @@ const revealMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 if ('IntersectionObserver' in window && !revealMotion.matches) {
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('is-visible');
-      revealObserver.unobserve(entry.target);
+      const hasKeyboardFocus = entry.target.contains(document.activeElement);
+      const visible = entry.isIntersecting || entry.boundingClientRect.top < 0 || hasKeyboardFocus;
+      entry.target.classList.toggle('is-visible', visible);
     });
   }, { threshold: 0, rootMargin: '0px 0px -80px 0px' });
   revealSections.forEach(section => {
@@ -407,7 +407,6 @@ if ('IntersectionObserver' in window && !revealMotion.matches) {
     revealObserver.observe(section);
     section.addEventListener('focusin', () => {
       section.classList.add('is-visible');
-      revealObserver.unobserve(section);
     });
   });
   revealMotion.addEventListener('change', () => {
