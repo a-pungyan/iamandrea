@@ -82,7 +82,7 @@
           </article>
           <article class="project">
             <a class="project-preview" href="elevator-issue-tracker.html" aria-label="View Elevator Issue Tracker">
-              <img src="assets/elevator-issue-tracker-placeholder.svg" alt="Screenshot placeholder for Elevator Issue Tracker; actual screenshot coming soon." width="1200" height="900" loading="lazy" />
+              <img src="assets/downtimeByCab.png" alt="Bar graph comparing downtime hours across eight elevator cabs." width="1452" height="546" loading="lazy" style="object-fit: contain;" />
             </a>
             <h3>Elevator Issue Tracker</h3>
             <p>A tracker for eight elevators that consolidated recurring faults and service history, supporting management’s service contract negotiations.</p>
@@ -104,7 +104,22 @@
       </section>
       <section class="contact-section" id="contact" aria-labelledby="contact-title">
         <h2 id="contact-title">Contact</h2>
-        <p>Contact details coming soon.</p>
+        <p>Email me at <a href="mailto:andrearenaeten@icloud.com">andrearenaeten@icloud.com</a>, or write a message below.</p>
+        <form class="contact-form" action="mailto:andrearenaeten@icloud.com" method="post" enctype="text/plain">
+          <div class="contact-fields">
+            <label for="contact-name">Name
+              <input id="contact-name" name="name" type="text" autocomplete="name" required maxlength="120" />
+            </label>
+            <label for="contact-email">Email
+              <input id="contact-email" name="email" type="email" autocomplete="email" required maxlength="254" />
+            </label>
+          </div>
+          <label for="contact-message">Message
+            <textarea id="contact-message" name="message" rows="6" required maxlength="5000"></textarea>
+          </label>
+          <p class="contact-help" id="contact-help">This opens your email app with your message ready to send.</p>
+          <button class="contact-submit" type="submit" aria-describedby="contact-help">Email me</button>
+        </form>
       </section>
     </main>
 

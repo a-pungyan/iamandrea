@@ -149,8 +149,18 @@ p { color: var(--muted); font-size: 16px; line-height: 1.65; margin: 0; max-widt
 .project-link:hover { text-decoration-color: currentColor; }
 .about-section { padding-block: 16px 80px; max-width: 700px; }
 .about-section > h2 { margin-bottom: 20px; }
-.contact-section { padding-block: 16px 64px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 16px 32px; }
-.contact-section > h2 { margin: 0; }
+.contact-section { padding-block: 16px 64px; max-width: 700px; }
+.contact-section > h2 { margin: 0 0 20px; }
+.contact-form { margin-top: 32px; }
+.contact-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.contact-form label { display: grid; gap: 10px; font-size: 14px; margin-bottom: 24px; }
+.contact-form input, .contact-form textarea { width: 100%; min-width: 0; border: 1px solid #b0b0b0; border-radius: 0; padding: 12px; font: inherit; font-size: 16px; color: #000; background: #fff; caret-color: #000; }
+.contact-form textarea { resize: vertical; min-height: 150px; }
+.contact-form input:focus-visible, .contact-form textarea:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
+.contact-form .contact-help { font-size: 13px; margin-bottom: 18px; }
+.contact-submit { min-height: 44px; padding: 12px 22px; font: inherit; font-size: 14px; color: #000; background: #fff; border: 1px solid #000; cursor: pointer; }
+.contact-submit:hover { background: #f2f2f0; }
+.contact-submit:focus-visible { outline: 2px solid #000; outline-offset: 4px; }
 .project-detail { max-width: 1120px; padding-block: 40px 80px; }
 .project-detail p { max-width: none; }
 .back-link { font-size: 14px; margin-bottom: 40px; }
@@ -233,6 +243,7 @@ footer { padding-block: 26px; color: var(--muted); font-size: 12px; }
   .word-map { gap: 0; padding: 10px 0; }
   .word-row { gap: 3px; }
   .project-grid { grid-template-columns: 1fr; gap: 56px; }
+  .contact-fields { grid-template-columns: 1fr; gap: 0; }
   .screenshot-gallery { grid-template-columns: 1fr; gap: 28px; }
   .automation-flow { display: block; }
   .automation-flow > figure { margin-top: 24px; }
