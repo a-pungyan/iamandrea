@@ -22,7 +22,7 @@
 * { box-sizing: border-box; }
 h1, h2, h3, .name { color: #000; }
 html { scroll-behavior: smooth; }
-body { margin: 0; padding: 0 clamp(24px, 6vw, 96px); }
+body { --page-gutter: clamp(24px, 6vw, 96px); --header-gutter: clamp(20px, 2.5vw, 40px); margin: 0; padding: 0 var(--page-gutter); }
 a { display: inline-block; color: inherit; text-decoration-thickness: 1px; text-underline-offset: 6px; }
 a, button { -webkit-tap-highlight-color: #e8e8e8; transition: color 160ms ease-out, background-color 160ms ease-out, transform 160ms ease-out; }
 a:hover, a:focus-visible { color: var(--text); }
@@ -30,7 +30,7 @@ a:active, button:active { transform: translateY(2px); }
 a:focus-visible { outline: 2px solid var(--text); outline-offset: 7px; border-radius: 2px; }
 ::selection { color: var(--text); background: #e8e8e8; }
 .site-header, main, footer { max-width: 1280px; margin-inline: auto; }
-.site-header { min-height: 112px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+.site-header { max-width: none; margin-inline: calc(var(--header-gutter) - var(--page-gutter)); min-height: 112px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
 .name { font-family: "Keep Calm", sans-serif; font-size: clamp(32px, 4.5vw, 60px); font-weight: 500; line-height: 1.12; letter-spacing: -0.025em; text-decoration: none; padding-block: 16px; min-width: 0; overflow-wrap: anywhere; }
 .site-header { position: sticky; top: 0; z-index: 20; background: var(--background); }
 .site-header:not(.menu-enabled) nav { flex-wrap: wrap; }
@@ -51,6 +51,7 @@ a:focus-visible { outline: 2px solid var(--text); outline-offset: 7px; border-ra
 nav { display: flex; gap: clamp(22px, 3.5vw, 48px); }
 nav a { font-size: 14px; text-decoration: none; padding: 10px 12px; margin-inline: -12px; border-radius: 4px; }
 nav a:hover { text-decoration: underline; }
+.navigation-letter { position: fixed; z-index: 50; pointer-events: none; white-space: pre; transform-origin: center; }
 .intro {
   position: relative;
   padding-block: clamp(12px, 2vw, 28px) clamp(56px, 7vw, 96px);
@@ -93,7 +94,7 @@ nav a:hover { text-decoration: underline; }
   justify-content: center;
   position: relative;
   padding: 2px 0;
-  font-size: clamp(11px, calc(var(--word-size) * 0.9vw), calc(var(--word-size) * 9.9px));
+  font-size: clamp(11px, calc(var(--word-size) * 1.12vw), calc(var(--word-size) * 12.32px));
   line-height: 1.05;
   white-space: nowrap;
 }

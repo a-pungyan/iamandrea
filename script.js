@@ -36,19 +36,84 @@ function setMenuOpen(open) {
   navigation.hidden = !open;
 }
 
-function updateHeader() {
-  const wasAtTop = atTop;
-  atTop = window.scrollY <= 40;
+const headerMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let headerFlights = [];
+let headerAnimations = [];
+function clearHeaderMotion() {
+  headerAnimations.forEach(animation => animation.cancel());
+  headerFlights.forEach(letter => letter.remove());
+  headerAnimations = [];
+  headerFlights = [];
+}
+function getNavigationLetters() {
+  const letters = [];
+  navigation.querySelectorAll('a').forEach(link => {
+    const node = link.firstChild;
+    if (!node || node.nodeType !== Node.TEXT_NODE) return;
+    const style = getComputedStyle(link);
+    for (let index = 0; index < node.length; index++) {
+      if (!node.textContent[index].trim()) continue;
+      const range = document.createRange();
+      range.setStart(node, index);
+      range.setEnd(node, index + 1);
+      const rect = range.getBoundingClientRect();
+      letters.push({ text: node.textContent[index], rect, font: style.font, color: style.color });
+    }
+  });
+  return letters;
+}
+function animateNavigationLetters(letters, buttonRect, gathering) {
+  letters.forEach((letter, index) => {
+    const ghost = document.createElement('span');
+    ghost.className = 'navigation-letter';
+    ghost.setAttribute('aria-hidden', 'true');
+    ghost.textContent = letter.text;
+    Object.assign(ghost.style, { left: `${letter.rect.left}px`, top: `${letter.rect.top}px`, font: letter.font, color: letter.color });
+    document.body.append(ghost);
+    headerFlights.push(ghost);
+    const dx = buttonRect.left + buttonRect.width / 2 - letter.rect.left - letter.rect.width / 2;
+    const dy = buttonRect.top + buttonRect.height / 2 - letter.rect.top - letter.rect.height / 2;
+    const spread = { transform: 'translate(0, 0) scale(1)', opacity: 1 };
+    const collected = { transform: `translate(${dx}px, ${dy}px) scale(0.15)`, opacity: 0 };
+    const animation = ghost.animate(gathering ? [spread, collected] : [collected, spread], {
+      duration: 430,
+      delay: index * 6,
+      easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+      fill: 'both',
+    });
+    headerAnimations.push(animation);
+    animation.finished.then(() => ghost.remove()).catch(() => ghost.remove());
+  });
+}
+function updateHeader(initial = false) {
+  const nextAtTop = initial ? window.scrollY <= 40 : (atTop ? window.scrollY < 72 : window.scrollY <= 16);
+  if (!initial && nextAtTop === atTop) return;
+  clearHeaderMotion();
+  const gathering = !nextAtTop;
+  const animate = !initial && !headerMotion.matches;
+  const lettersBefore = animate && gathering ? getNavigationLetters() : [];
+  const oldButtonRect = !gathering ? menuToggle.getBoundingClientRect() : null;
+  const focusedLink = navigation.contains(document.activeElement);
+  const focusedToggle = document.activeElement === menuToggle;
+  atTop = nextAtTop;
   header.classList.toggle('menu-enabled', !atTop);
   menuToggle.hidden = atTop;
-  if (atTop || wasAtTop !== atTop) {
-    const focusedLink = navigation.contains(document.activeElement);
-    setMenuOpen(atTop || focusedLink);
-  }
+  setMenuOpen(atTop || focusedLink);
+  if (focusedToggle && atTop) navigation.querySelector('a').focus({ preventScroll: true });
+  if (!animate) return;
+  const letters = gathering ? lettersBefore : getNavigationLetters();
+  const buttonRect = gathering ? menuToggle.getBoundingClientRect() : oldButtonRect;
+  animateNavigationLetters(letters, buttonRect, gathering);
+  const fadeTarget = gathering ? menuToggle : navigation;
+  headerAnimations.push(fadeTarget.animate([{ opacity: 0 }, { opacity: 1 }], {
+    duration: 180, delay: 430 + letters.length * 6, fill: 'backwards',
+  }));
 }
 setMenuOpen(atTop);
-updateHeader();
-window.addEventListener('scroll', updateHeader, { passive: true });
+updateHeader(true);
+window.addEventListener('scroll', () => updateHeader(), { passive: true });
+headerMotion.addEventListener('change', clearHeaderMotion);
+window.addEventListener('resize', clearHeaderMotion);
 
 menuToggle.addEventListener('click', () => {
   menuPinned = !menuPinned;
