@@ -282,7 +282,7 @@ footer { padding-block: 26px; color: var(--muted); font-size: 12px; }
   }
   .word-map { gap: 0; padding: 10px 0; }
   .intro-composition { flex-shrink: 0; }
-  .word { font-size: clamp(16px, calc(var(--word-size) * 1.75vw), 44px); }
+  .word { font-size: clamp(22px, calc(var(--word-size) * 2.8vw), 70px); }
   .word-row { gap: 3px; }
   .project-grid { grid-template-columns: 1fr; gap: 56px; }
   .screenshot-gallery { grid-template-columns: 1fr; gap: 28px; }
