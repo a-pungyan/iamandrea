@@ -23,6 +23,15 @@ window.addEventListener('scroll', updateBackToTop, { passive: true });
 updateBackToTop();
 const menuToggle = document.querySelector('.menu-toggle');
 const navigation = document.getElementById('main-navigation');
+// Keep the first mobile screen reserved for the intro, even when the header wraps.
+function measureIntroHeader() {
+  if (!header.classList.contains('menu-enabled')) {
+    document.documentElement.style.setProperty('--mobile-header-height', `${header.getBoundingClientRect().height}px`);
+  }
+}
+measureIntroHeader();
+window.addEventListener('resize', measureIntroHeader);
+document.fonts?.ready.then(measureIntroHeader);
 let menuPinned = false;
 let closeTimer;
 let atTop = window.scrollY <= 40;

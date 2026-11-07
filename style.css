@@ -272,9 +272,17 @@ footer { padding-block: 26px; color: var(--muted); font-size: 12px; }
   .name { width: auto; flex: 1; padding-block: 8px; }
   nav { gap: 28px; }
   .site-header:not(.menu-enabled) nav { flex-basis: 100%; gap: 22px; }
-  .intro { padding-block: 22px 48px; }
+  .intro {
+    min-height: calc(100svh - var(--mobile-header-height, 160px));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: 32px 72px;
+    overflow-x: clip;
+  }
   .word-map { gap: 0; padding: 10px 0; }
-  .word { font-size: clamp(11px, calc(var(--word-size) * 0.85vw), 24px); }
+  .intro-composition { flex-shrink: 0; }
+  .word { font-size: clamp(16px, calc(var(--word-size) * 1.75vw), 44px); }
   .word-row { gap: 3px; }
   .project-grid { grid-template-columns: 1fr; gap: 56px; }
   .screenshot-gallery { grid-template-columns: 1fr; gap: 28px; }
